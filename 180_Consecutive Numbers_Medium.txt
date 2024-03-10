@@ -1,0 +1,10 @@
+# Write your MySQL query statement below
+select l1.num as ConsecutiveNums   from logs l1
+left join logs l2 on l1.id+1=l2.id
+left join logs l3 on l1.id+2=l3.id
+left join logs l4 on l1.id-1=l4.id
+left join logs l5 on l1.id-2=l5.id
+where (l1.num=l2.num and l1.num=l4.num)
+or (l1.num=l5.num and l1.num=l4.num)
+or (l1.num=l2.num and l1.num=l3.num)
+group by l1.num;
