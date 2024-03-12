@@ -1,0 +1,7 @@
+# Write your MySQL query statement below
+with cte as (select i1.pid,i1.tiv_2016,i1.lat,i1.lon from Insurance i1
+join Insurance i2 on i1.pid <> i2.pid and i1.tiv_2015=i2.tiv_2015
+group by i1.pid)
+select round(sum(tiv_2016),2) as tiv_2016
+from cte where (lat,lon) in (select  lat,lon from Insurance 
+group by lat,lon having count(*) =1);
