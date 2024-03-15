@@ -1,0 +1,13 @@
+# Write your MySQL query statement below
+with cte as (select product_id,
+"store1" as store,ifnull(store1,0) as price
+from products
+union
+select product_id,
+"store2" as store,ifnull(store2,0) as price
+from products
+union
+select product_id,
+"store3" as store,ifnull(store3,0) as price
+from products)
+select * from cte where price>0;
