@@ -1,0 +1,6 @@
+select book_id,name
+from books b left join orders o
+on b.book_id=o.book_id
+where b.available_from <'2019-05-23'
+group by b.book_id
+having sum(if(dispatch_date >= '2018-06-23',quantity,0)) < 10;

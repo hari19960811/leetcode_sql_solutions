@@ -1,0 +1,9 @@
+with cte as ( select project_id,count(employee_id) as cnt
+from project
+group by project_id)
+select * 
+from project
+group by project_id
+having count(employee_id)= (
+select max(cnt)
+from cte);

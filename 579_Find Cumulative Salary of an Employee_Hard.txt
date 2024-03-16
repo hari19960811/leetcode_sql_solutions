@@ -1,0 +1,12 @@
+with cte as (
+select id,max(month) as max_month 
+from
+Employee 
+group by id)
+select e1.id,e1.month,sum(e2.salary)
+from employee e1 join employee e2
+on e1.id=e2.id and 
+(e2.month-e1.month) <3
+join cte c on e1.id=c.id
+where e1.month < c.max_month
+order by e1.id,e1.month desc;

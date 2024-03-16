@@ -1,0 +1,9 @@
+with cte as (select event_type,avg(occurences) as avg_num
+from events
+group by event_type)
+select business_id
+from events e join cte c
+on e.event_type=c.event_type
+where e.occurences > c.avg_num
+group by business_id
+having count(distinct event_type) >1;;

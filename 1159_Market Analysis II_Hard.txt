@@ -1,0 +1,4 @@
+select *
+from users u left join orders o
+on u.user_id=o.seller_id
+left join items i on o.item_id=i.item_id

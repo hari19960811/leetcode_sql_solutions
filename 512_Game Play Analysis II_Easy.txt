@@ -1,0 +1,6 @@
+with cte as (select player_id,min(event_date) as min_date
+from activity
+group by player_id)
+select player_id,device_id 
+from activity a join cte c 
+on a.player_id=c.player_id and a.event_date=c.min_date;

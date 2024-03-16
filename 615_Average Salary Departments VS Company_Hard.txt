@@ -1,0 +1,16 @@
+with cte as (
+select  date_format(pay_date,'%y-%m') as month,
+avg(salary) as com_avg
+from salary 
+group by date_format(pay_date,'%y-%m') 
+)
+select date_format(s.pay_date,'%Y-%m') as pay_month,
+department_id,
+(case when avg(salary)>com_avg then 'higher'
+     when avg(salary)<com_avg then 'lower'
+     when avg(salary)=com_avg then 'same'
+     end) as comparison 
+from salary s 
+join employee e on s.employee_id=e.employee_id
+join cte c on date_format(s.pay_date,'%Y-%m')=c.month
+group by date_format(s.pay_date,'%Y-%m'),department_id;

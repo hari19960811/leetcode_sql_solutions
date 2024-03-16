@@ -1,0 +1,8 @@
+select buyer_id
+from sales s join product p
+on s.product_id=p.product
+where buyer_id not in (select buyer_id
+from sales s join product p
+on s.product_id=p.product where product_name='iPhone') 
+where product_name ='S8'
+group by buyer_id;

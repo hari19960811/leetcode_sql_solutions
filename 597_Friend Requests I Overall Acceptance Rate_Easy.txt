@@ -1,0 +1,6 @@
+select round(ifnull((select count(distinct(requester_id,accepter_id)) 
+from request_accepted
+/
+select count(*)
+from friend_request),0),2) as accept_rate;
+

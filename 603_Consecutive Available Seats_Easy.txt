@@ -1,0 +1,5 @@
+select seat_id 
+from cinema
+where free=1
+group by seat_id-row_number()(order by seat_id)
+having count(seat_id)>=2;

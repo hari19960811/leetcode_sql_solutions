@@ -1,0 +1,9 @@
+with cte as (select project_id,max(experience_years) as mx_yrs 
+from project p join employee e
+on p.employee_id=e.employee_id
+group by project_id)
+select project_id,employee_id
+from project p join employee e
+on p.employee_id=e.employee_id
+join cte c on p.project_id=c.project_id
+where e.experience_years=c.mx_yrs;

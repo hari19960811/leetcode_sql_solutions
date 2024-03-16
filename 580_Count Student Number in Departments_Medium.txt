@@ -1,0 +1,5 @@
+select d.dept_name,coalesce(count(student_id),0) as student_number
+from department d left join student s
+on d.dept_id=s.dept_id
+group by d.dept_id
+order by count(student_id) desc,dept_name;

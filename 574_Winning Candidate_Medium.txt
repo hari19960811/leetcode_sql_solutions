@@ -1,0 +1,5 @@
+select c.name 
+from candidate c left join vote v
+on c.id=v.candidateid 
+group by c.id
+order by count(v.id) desc limit 1;

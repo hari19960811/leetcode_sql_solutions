@@ -1,0 +1,11 @@
+with cte as (select player_id,min(event_date) as min_date
+from activity
+group by event_date)
+select min_date,
+count(distinct(if event_date=min_date,a.player_id,null)) as installs,
+round(count(if(event_date-min_date=1,a.player_id,null)
+/
+count(distinct(if event_date=min_date,a.player_id,null)) * 100.0,2) as Day1_retention
+from activity a 
+join cte c on a.player_id=c.player_id
+group by min_date 

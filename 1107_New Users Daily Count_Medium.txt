@@ -1,0 +1,8 @@
+with cte as (select user_id,min(activity_date) as min_date
+from traffic
+where activity='login')
+select login_date,count(distinct user_id) as user_count 
+from traffic t left join cte c
+on t.user_id=c.user_id
+where datediff('2019-06-23',login_date)<=90
+group by login_date; 

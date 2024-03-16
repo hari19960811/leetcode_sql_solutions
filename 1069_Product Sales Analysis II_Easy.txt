@@ -1,0 +1,5 @@
+select p.product_id.
+sum(price) as total_quantity
+from product p left join sales s 
+on p.product_id=s.product_id
+group by p.product_id;
