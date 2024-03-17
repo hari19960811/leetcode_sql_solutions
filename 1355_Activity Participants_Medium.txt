@@ -1,0 +1,9 @@
+with cte as (select activity,count(id) as num
+from friends
+group by activity)
+select activity
+from friends
+group by activity
+having 
+(count(id) !=(select max(num) from cte)
+or count(id) !=(select min(num) from cte))

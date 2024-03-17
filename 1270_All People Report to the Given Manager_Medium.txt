@@ -1,0 +1,5 @@
+select e1.employee_id
+from employee e1
+join employe e2 on e1.manager_id=e2.employee_id
+join employee e3 on e2.manager_id=e3.employee_id
+where e.employee_id!=1 and e3.manager_id=1;

@@ -1,0 +1,9 @@
+select o.customer_id,c.name
+from orders o join customers c
+on o.customer_id=c.customer_id
+join product p
+on o.product_id=p.product_id
+where (date_format(o.order_date,'%Y-%m')='2020-07'
+or date_format(o.order_date,'%Y-%m')='2020-06')
+group by o.customer_id,date_format(o.order_date,'%Y-%m')
+having count(distinct if(o.quantity * p.price) >100,1,null) =2 ;

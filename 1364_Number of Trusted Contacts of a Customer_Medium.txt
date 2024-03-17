@@ -1,0 +1,10 @@
+select invoice_id,cus.customer_name,price
+count(c.user_id) as contacts_cnt,
+count(cu.email) as trusted_contacts_cnt
+from invoices i join customer cus
+on i.user_id=cus.customer_id
+join contacts c
+on i.user_id=c.user_id
+left join customers cu on c.contact_email=cu.email
+group by invoice_id
+order by invoice_id;

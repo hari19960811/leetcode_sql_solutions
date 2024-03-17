@@ -1,0 +1,13 @@
+with cte as (
+select caller_id,duration
+from calls
+select callee_id as caller_id,duration
+from call)
+select co.name
+from cte c join  join person p
+on c.caller_id=p.id
+join country co
+on left(co.phone_number,3)=co.country_code
+group by c.caller_id
+having avg(duration)> (select avg(duration)*2 as avg_dur 
+from calls);

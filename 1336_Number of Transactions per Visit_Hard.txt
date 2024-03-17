@@ -1,0 +1,19 @@
+with cte as (
+select 0 as num
+union all
+select num+1 
+from cte where num <= (select count(user_id) 
+from transaction
+group by user_id,transaction_date)),
+visit as (
+select u.user_id,ifnull(count(t.user_id),0) as transaction_count
+from visits v
+left join transactions t
+on v.user_id=t.user_id and v.visit_dat=t.transaction_date
+group by u.user_id,u.visit_date)
+select c.num as transaction_count,
+ifnull(count(v.user_id),0) as visits_count
+from cte c left join visit v
+on c.num=v.transaction_count 
+group by c.num
+order by c.num;

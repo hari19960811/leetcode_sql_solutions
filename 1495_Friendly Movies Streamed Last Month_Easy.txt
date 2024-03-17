@@ -1,0 +1,7 @@
+select title
+from TVProgram t join content c 
+on t.content_id=c.content_id
+where date_format(program_date,'%Y-%m')='2020-06'
+and kids_content='Y'
+and content_type='Movies'
+groupby content_id 

@@ -1,0 +1,13 @@
+with cte as (select id_1,id_2 from (select 
+user1_id as id_1,user2_id as id_2
+from friendship
+union
+select 
+user2_id as id_1,user1_id as id_2
+from friendship)
+where id_1=1)
+select page_id as recommended_page
+likes l join cte c 
+on l.user_id=c.id_2 
+where page_id not in (select page_id
+ from likes where user_id=1)

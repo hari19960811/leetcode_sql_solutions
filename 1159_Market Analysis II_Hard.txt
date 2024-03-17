@@ -1,4 +1,12 @@
-select *
-from users u left join orders o
-on u.user_id=o.seller_id
+with cte as (select *,
+rank() over(partition by seller_id order by order_date) as rk
+from users)
+select u.user_id as seller_id,
+case when max(rk) <2 then 'no'
+     when (rk=2 and u.favorite_brand=i.item_brand) then 'yes'
+     else 'no' end as 2nd_item_fav_brand 
+from user_id u
+join cte c
+on u.user_id=c.seller_id
 left join items i on o.item_id=i.item_id
+group by u.user_id;

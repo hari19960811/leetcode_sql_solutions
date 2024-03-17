@@ -1,0 +1,7 @@
+select l.id,a.name
+from logins l
+join accounts a on l.id=a.id
+group by l.id,
+l.login_date - row_number() over(partition by l.id order by l.login_date) 
+having count(l.id)>=5
+order by l.id;

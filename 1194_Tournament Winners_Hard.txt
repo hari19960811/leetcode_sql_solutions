@@ -1,0 +1,15 @@
+with cte as (select group_id,m.first_player as player_id,sum(first_score) as score
+from matches m join players p
+on m.first_player=p.player_id
+group by group_id,m.first_player
+
+union all
+
+select group_id,m.second_player as player_id,sum(second_score) as score
+from matches m join players p
+on m.second_player=p.player_id
+group by group_id,m.second_player)
+select group_id,player_id
+from cte
+group by group_id
+order by score desc,player_id limit 1;  

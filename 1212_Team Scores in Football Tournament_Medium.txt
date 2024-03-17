@@ -1,0 +1,18 @@
+with cte as (select team_id,team_name,
+case when host_goals>guest_goals then 3
+     when host_goals<guest_goals then 0
+     when host_goals=guest_goals then 1
+end as num_points
+from matches m join team t
+on m.host_team=t.team_id
+union all
+select team_id,team_name,
+case when guest_goals>host_goals then 3
+     when guest_goals<host_goals then 0
+     when guest_goals=host_goals then 1
+end as num_points
+from matches m join team t
+on m.guest_team=t.team_id)
+select team_id,team_name,sum(num_points) 
+from cte
+group by team_id,team_name

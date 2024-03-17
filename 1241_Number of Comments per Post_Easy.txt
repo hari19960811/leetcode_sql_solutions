@@ -1,0 +1,4 @@
+select parent_id as post_id,
+count(distinct sub_id) as number_of_comments
+from submissions
+group by parent_id;

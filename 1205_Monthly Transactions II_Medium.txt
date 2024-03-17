@@ -1,0 +1,24 @@
+with cte as (select country,trans_date from transactions
+union all
+select t.country,c.trans_date
+from chargebacks c join transactions t
+on c.trans_id=t.id),
+app as(
+
+select date_format(trans_date,'%Y-%m') as month,
+country,
+count(if(state='approved',id,null)) as approved_count,
+sum(if(state='approved',amount,0)) as approved_amount
+from transactions
+group by date_format(trans_date,'%Y-%m'),country),
+dec as (
+select date_format(c.trans_date,'%Y-%m') as month,
+t.country,
+count(c.trans_id) as chargeback_count,
+sum(t.amount) as chargeback_amount
+from chargebacks c join transactions t
+on c.trans_id=t.id
+group by date_format(c.trans_date,'%Y-%m'),t.country)
+select * 
+from cte c left join app a on c.trans_date=a.trans_date and c.country = a.country
+left join dec d on c.trans_date=d.trans_date and c.country = d.country

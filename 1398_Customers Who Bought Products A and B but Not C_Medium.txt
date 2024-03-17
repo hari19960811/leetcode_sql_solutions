@@ -1,0 +1,10 @@
+select o.customer_id,c.customer_name
+from orders o left join customers c
+on o.customer_id=c.customer_id 
+where o.customer_id not in (
+select customer_id 
+from orders where product_name='C')
+where product_namein ('A','B')
+group by o.customer_id
+having count(distinct product_name)=2
+order by o.customer_id;

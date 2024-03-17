@@ -1,0 +1,13 @@
+with cte as (
+select min(period_start) as min_date
+from sales
+union 
+select min_date +1
+from cte where min_date<=(select max(period_end) from sales))
+select s.product_id,s.product_name,
+date(c.min_date,'%Y-%m') as report_year,
+sum(average_daily_sales) as total amount 
+from sales s join product p
+on s.product_id=p.product_id
+join cte c on c.mindate between s.period_start and s.period_end
+group by s.product_id,date(c.min_date,'%Y-%m') ;
