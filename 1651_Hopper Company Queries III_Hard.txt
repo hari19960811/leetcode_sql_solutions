@@ -1,0 +1,16 @@
+with recursive cte as (
+select 1 as month
+union 
+select month+1 from cte where month<=12),
+ride as (
+select month(r.requested_at) as month,
+sum(ifnull(ride_distance,0)) as total_distance,
+sum(ifnull(ride_duration,0)) as total_duration
+from rides r join acceptedrides a
+on r.ride_id=a.ride_id and year(r.requested_at)=2020
+group by month(r.requested_at) )
+select c.month,
+round(avg(r.total_distance) over(rows between current row and 2 following),2) as average_ride_distance,
+round(avg(r.total_duration) over(rows between current row and 2 following),2) as average_ride_duration
+from cte c left join ride r
+on c.month=r.month;

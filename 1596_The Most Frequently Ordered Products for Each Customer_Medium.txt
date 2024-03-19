@@ -1,0 +1,12 @@
+with cte as (
+select 
+customer_id,product_id,
+rank() over(partition by customer_id order by count(order_id) desc) as rk
+from orders
+group by customer_id,product_id)
+
+select c.customer_id,c.product_id,p.product_name
+from cte c left join products p
+on p.product_id=c.product_id
+where rk=1;
+ 

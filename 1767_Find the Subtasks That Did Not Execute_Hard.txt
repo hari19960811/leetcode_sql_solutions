@@ -1,0 +1,11 @@
+with recursive cte as (
+select distinct task_id,1 as num from tasks t1
+union 
+select task_id,num+1 as num from cte c
+where t1.task_id=c.task_id and c.num <=(
+select max(subtasks_count)
+from tasks where c.task_id=task_id)
+select c.task_id,e.num as subtask_id
+from cte c left join executed e
+on c.task_id=e.task_id
+where e.task_id is null;

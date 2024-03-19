@@ -1,0 +1,10 @@
+with cte as (
+select * ,row_number() over(partition by o.customer_id order by
+order_date desc) as rk
+from orders o join customers c
+on o.customer_id=c.customer_id)
+select 
+c.customer_name,c.customer_id,c.order_id,corder_date 
+from cte
+where rk<=3
+order by 1,2,4;

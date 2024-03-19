@@ -1,0 +1,11 @@
+with cte as (
+select paid_by as payee,amount from transaction
+union all
+select paid_to as payee,-amount from transaction)
+select 
+c.payee,u.user_name,sum(c.transaction) as credit
+case when (sum(c.transaction)-u.credit) < 0 then 'Yes'
+     else 'No' end as credit_limit_breached 
+from cte c join users u
+on c.payee=u.user_id
+group by payee

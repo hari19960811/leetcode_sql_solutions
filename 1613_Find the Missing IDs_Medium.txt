@@ -1,0 +1,6 @@
+with cte as (
+select 1 as num
+union 
+select num+1 from cte where num<=(select max(customer_id) from customer))
+select *
+from cte where num not in (select customer_id from customer);

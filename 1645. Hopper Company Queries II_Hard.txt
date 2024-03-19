@@ -1,0 +1,23 @@
+with recursive cte as (
+select 1 as month
+union 
+select month+1 from cte where month<=12),
+driver as (
+select month(join_date) as month,
+count(d1.driver_id) as active_drivers
+from drivers d1 join drivers d2
+on year(d2.join_date)<2020 or
+   (year(d2.join_date)=2020 and d2.join_date>=d2.join_date)
+group by month(d1.join_date) ),
+ride as (
+select month(r.requested_at) as month,
+count(distinct a.driver_id) as accepted_drivers
+from rides r join acceptedrides a
+on r.ride_id=a.ride_id and year(r.requested_at)=2020
+group by month(r.requested_at) )
+select 
+cte.month as month,round((accepted_drivers/active_drivers) * 100.0),2) as working_percentage
+from cte left join driver
+on cte.month=driver.month
+left join ride
+on cte.month=driver.month;

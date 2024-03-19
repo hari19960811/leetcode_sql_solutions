@@ -1,0 +1,4 @@
+select ifnull(sum(b.apple_count+c.apple_count),0) as apple_count,
+ifnull(sum(b.orange_count+c.orange_count),0) as orange_count
+from boxes b left join chests c
+on b.chest_id=c.chest_id;

@@ -1,0 +1,13 @@
+with cte as (
+select user_id,visit_date from uservisits
+union
+select distinct(user_id) as user_id,'2021-01-01' as visit_date
+),
+ranks as (
+select *,
+visit_date - lag(visit_date) over(partition by user_id order by visit_date) as diff,
+rank ()
+over(partition by user_id order by (visit_date - lag(visit_date) over(partition by user_id order by visit_date)) desc) as rk
+from cte)
+select user_id,diff as 'biggest_window' 
+from ranks where rk =1;

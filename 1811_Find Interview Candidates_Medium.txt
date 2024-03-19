@@ -1,0 +1,23 @@
+with cte as (
+select contest_id,'gold' as medal,gold_medal as player
+from contests
+union all
+select contest_id,'silver' as medal,silver_medal as player
+from contests
+union all
+select contest_id,'bronze' as medal,bronze_medal as player
+from contests),
+candidates as(
+select c.player
+from cte c
+where c.medal='gold'
+group by c.player
+having count(contest_id)>=3
+union 
+select distinctc.player
+from cte
+group by contest_id - row_number() over(partition by player order by contest_id)
+having count(contest_id)>=3)
+select u.name,u.mail
+from candidates c join users u
+on c.player= u.user_id ; 

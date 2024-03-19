@@ -1,0 +1,11 @@
+with cte as (
+select product_id,max(order_date) as mx_date
+from orders 
+group by product_id)
+select 
+p.product_name,p.product_id,o.order_id,o.order_date
+from cte c join products p
+on c.product_id=p.product_id
+join orders o
+on o.order_date=c.mx_date and c.product_id=o.order_date
+order by p.product_name,p.product_id,o.order_id;
