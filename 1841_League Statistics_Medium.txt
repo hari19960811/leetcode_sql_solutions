@@ -1,0 +1,22 @@
+with cte as (
+select 
+home_team_id as id,home_team_goals as goal_for,away_team_goals as goal_against
+case when home_team_goals > away_team_goals then 3
+     when home_team_goals < away_team_goals then 0
+     else 1 end as pts
+from matches
+union all
+select 
+away_team_id as id,away_team_goals as goal_for,home_team_goals as goal_against
+case when away_team_goals > home_team_goals then 3
+     when away_team_goals < home_team_goals then 0
+     else 1 end as pts
+from matches)
+select 
+c.team_name,count(*) as matches_played,
+sum(pts) as points, sum(goal_for) as goal_for,
+sum(goal_against) as goal_against, sum(goal_for-goal_against) as goal_diff
+from cte c join teams t
+on c.id=t.team_id
+group by c.id
+order by 3 desc,6 desc,1; 

@@ -1,0 +1,9 @@
+with cte (
+select date(day) as date,
+max(amount) as mx_amount
+from transaction
+group by date(day)
+)
+select distinct transaction_id
+from transactions t join cte c 
+date(day)=c.date and t.amount=c.mx_amount;

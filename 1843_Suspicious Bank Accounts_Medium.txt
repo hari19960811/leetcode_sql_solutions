@@ -1,0 +1,11 @@
+with cte as (
+select account_id,date_format(date(day),'%Y-%m') as month
+from transactions t join accounts a
+on t.account_id=a.account_id
+where type='Creditor'
+group by t.account_id,date_format(date(day),'%Y-%m')
+having sum(amount) >= a.max_income)
+select distinct c1.account_id
+from cte c1 join cte c2
+on c1.account_id=c2.account_id
+where (c2.month,c1.month)=1;
