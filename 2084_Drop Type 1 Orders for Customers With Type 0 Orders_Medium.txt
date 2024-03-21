@@ -1,0 +1,12 @@
+with type_1 as 
+(
+select customer_id
+from orders
+group by customer_id
+having count(if(order_type=0,customer_id,0)=0
+)
+select o.* 
+from orders o left join type_1 t
+on o.customer_id=t.customer_id
+where o.order_type=0
+or (t.customer_id=o.customer_id and o.order_type=1)

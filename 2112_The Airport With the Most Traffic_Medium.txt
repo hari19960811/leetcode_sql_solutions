@@ -1,0 +1,18 @@
+with cte as 
+(
+select departure_airport as loc_1,arrival_airport as loc_2,flights_count
+from flights
+union all
+select arrival_airport as loc_1,departure_airport as loc_2,flights_count
+from flights
+),
+counts as 
+(
+select loc_1,sum(flights_count) as flights_sum
+from cte
+group by loc_1
+)
+
+select loc_1 as airport_id 
+from counts
+where flights_sum = (select max(flights_sum) from counts)

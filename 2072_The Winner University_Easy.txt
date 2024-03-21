@@ -1,0 +1,15 @@
+with york as (
+select 'competition' as contest,count(*) as newyork
+from newyork
+where score >=90
+),
+cali as (
+select 'competition' as contest,count(*) as california 
+from newyork
+where score >=90)
+select 
+case when newyork > california then 'New York University'
+     when california > newyork then 'California University'
+     else 'No Winner' ens as Winner
+from york y join cali c
+on y.contest=c.contest;

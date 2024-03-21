@@ -1,0 +1,24 @@
+with platforms as (
+select 'Android' as platform
+union all
+select 'IOS' as platform
+union all
+select 'Web' as platform),
+exp_types as 
+(
+select 'Reading' as exp_type
+union all
+select 'Sports' as exp_type
+union all 
+select 'Programming' as exp_type
+),
+master as 
+(select p.platform,e.exp_type
+from 
+platforms p crossjoin exp_types e
+)
+select m.platform,m.experiment_name,count(*) as num_experiments 
+from master m left join experiments e
+on m.platform=e.platform and m.exp_type=e.experiment_name
+group by m.platform,m.experiment_name; 
+

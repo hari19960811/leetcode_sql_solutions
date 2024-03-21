@@ -1,0 +1,19 @@
+with cte as
+(
+select t.team_id,t.name,t.points
+case when o.rank_diff = 1 then p.points_change
+     when o.rank_diff = -1 then -p.points_change
+     else 0 end as change
+from teampoints t join pointschange p
+on t.team_id=p.team_id
+join output o
+on t.team_id=o.team_id
+),
+total_sum as 
+(
+select c.team_id,c.name,
+       sum(c.points+c.change) as points
+from cte c
+)
+select *,rank() over(order by ponints desc) as rank
+from total_sum;

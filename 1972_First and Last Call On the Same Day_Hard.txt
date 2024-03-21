@@ -1,0 +1,19 @@
+with cte(
+select caller_id as id1,recipient_id as id2,call_time
+from calls 
+union all
+select caller_id as id1,recipient_id as id2,call_time
+from calls),
+times as (
+select 
+id1,date(call_time) as day,min(call_time) as min_time,
+max(call_time) as max_time
+from cte 
+group by id1,date(call_time)),
+final as (
+select distinct c.caller_id
+from cte c join times t1
+on c.caller_id=t1.id1 and c.call_time=t1.min_date
+join times t2 *
+on c.caller_id=t2.id2 and c.call_time=t2.max_date
+where t1.recipient_id=t2.recipient_id;

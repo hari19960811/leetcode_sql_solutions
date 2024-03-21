@@ -1,0 +1,12 @@
+select member_id,name,
+case when count(v.vist_id)=0 then 'Bronze'
+     when 100 * count(p.visit_id)/count(v.visit_id)
+            >= 80 then 'Diamond'
+     when 100 * count(p.visit_id)/count(v.visit_id)
+            >= 50 then 'Gold'
+     else 'Silver' end as Category 
+from members m left join visits v
+m.member_id=v.member_id
+left purchases p
+v.visit_id=p.visit_id
+group by member_id 

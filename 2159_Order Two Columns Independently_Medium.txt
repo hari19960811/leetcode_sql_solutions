@@ -1,0 +1,16 @@
+with first as
+(
+select first_col,
+row_number() over(order by first_col asc) as rk
+from data
+),
+second as
+(
+select second_col,
+row_number() over(order by second_cold desc) as rk
+)
+select f.first_col,s.second_col
+from first f join second s
+on f.rk=s.rk
+order by f.rk;
+ 

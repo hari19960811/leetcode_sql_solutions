@@ -1,0 +1,19 @@
+with cte as
+(
+select player_id,match_day,
+match_day - row_number() over(partition by player_id order by match_day) as streak
+from matches
+where result ='Win'
+),
+streaking as 
+(
+select c.player_id,count(*) as longest_streak
+from cte
+group by c.player_id,c.streak
+)
+select *
+from streaking
+where (player_id,longest_streak) in
+(select player_id,max(longest_streak)
+from streaking
+group by player_id) 

@@ -1,0 +1,9 @@
+select t1.account_id,t1.day,
+  sum(case when t2.type='Deposit' the t2.amount
+           else -t2.amount end) as balance 
+from transactions t1
+join transactions t2
+on t1.account_id=t2.account_id
+and t1.day <= t2.day
+group by t1.account_id,t1.day
+order by 1,2;

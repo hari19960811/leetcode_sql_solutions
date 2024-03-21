@@ -1,0 +1,5 @@
+select *
+from purchases
+where date(time_stamp) between '2022-03-08' and '2022-03-20'
+group by user_id
+having sum(amount) >=1000;

@@ -1,0 +1,29 @@
+with running_sum as 
+(
+select employee_id,experience,salary,
+sum(salary) over(order by salary desc,employee_id) as running_sum,
+salary - sum(salary) over(order by salary desc,employee_id)  
+as curr_balance
+from candidates 
+),
+seniors as
+(
+select 'Senior' as experience,ifnull(count(employee_id),0) as accepted_candidates,min(curr_balance) as curr_balance
+from running_sum
+where experience ='Senior'
+and running_sum <= 70000
+group by experience
+)
+juniors as
+(
+select 'Junior' as experience,ifnull(count(employee_id),0) as accepted_candidates,curr_balance
+from running_sum
+where experience ='Junior'
+and running_sum <= (select min(curr_balance) from seniors)
+group by experience
+)
+select experience,accepted_candidates from seniors
+union
+select experience,accepted_candidates from juniors;
+
+
