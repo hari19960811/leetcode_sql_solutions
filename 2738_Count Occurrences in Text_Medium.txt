@@ -1,0 +1,9 @@
+select 
+'bull' as word,count(*) as count 
+files
+where content like '%bull%'
+union
+select 
+'bear' as word,count(*) as count 
+files
+where content like '%bear%';

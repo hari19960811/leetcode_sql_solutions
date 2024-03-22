@@ -1,0 +1,13 @@
+with cte as
+(
+select passenger_id,flight_id,count(p2.passenger_id)as cnt
+from passengers p1 join passengers p2
+on p1.flight_id=p2.flight_id and p1.booking_time >p2.booking_time
+group by passenger_id,flight_id
+)
+select 
+passenger_id,
+case when c.cnt <= f.capacity then 'Confirmed'
+     else 'Waitlist' as Status
+from cte c join flights f
+on c.flight_id=f.flight_id 

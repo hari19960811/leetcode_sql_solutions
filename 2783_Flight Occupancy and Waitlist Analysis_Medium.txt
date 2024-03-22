@@ -1,0 +1,15 @@
+with cte 
+(
+select 
+flight_id,count(*) as passenger_count
+from passengers
+group by flight_id
+)
+select c.flight_id,
+case when c.passenger_count <= f.capacity then c.passenger_count
+     else f.capacity as booked_cnt,
+case when c.passenger_count <= f.capacity then 0
+     else f.capacity - c.passenger_count as waitlist_cnt 
+from cte c join flights f
+on c.flight_id=f.flight_id
+order by c.flight_id

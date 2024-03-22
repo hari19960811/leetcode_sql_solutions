@@ -1,0 +1,11 @@
+select 
+country,
+gold_medals,
+silver_medals,
+bronze_medals
+from olympic
+order by 
+	gold_medals desc,
+	silver_medals desc,
+	bronze_medals desc,
+  	country;

@@ -1,0 +1,14 @@
+with cte as 
+(
+select 
+customer_id,transaction_date,count(*) as cnt
+from transactions
+group by customer_id,transaction_date
+)
+select 
+distinct c.customer_id
+from cte c1 join cte c2
+on c1.customer_id=c2.customer_id
+and datediff(c2.transaction_date,c1.transaction_date)=1
+where cnt =
+(select max(cnt) from cte where customer_id =c1.customer_id)

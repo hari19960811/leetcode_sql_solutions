@@ -1,0 +1,31 @@
+with cte as (
+select customer_id,
+t1.transaction_date as date_1,
+t2.trnsaction_date as date_2,
+transaction_date - row_number() over
+(partition by customer_id order by transaction) as rk
+from transactions t1 
+left join transactions t2
+on t1.customer_id=t2.customer_id and 
+date_diff(t2.transaction_date,t1.transaction_date) =1
+and t2.amount >t1.amount
+)
+select customer_id,min(t1.transaction_date) as consecutive_start,
+max(t2.transaction_date) as consecutive_end
+from cte
+group by customer_id,rk
+having(date_2)>=3;
+
+
+
+
+
+
+
+
+
+
+
+transaction_date,
+(transaction_date - row_number() over(partition by customer_id
+order by transaction_date)

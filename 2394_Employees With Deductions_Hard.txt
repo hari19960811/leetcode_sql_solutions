@@ -1,0 +1,14 @@
+with cte as 
+(
+select
+employee_id, 
+sum(
+ceiling(timestampdiff(second,in_time,out_time) / 60)) 
+/ 60 as hours
+from logs
+group by employee_id
+)
+select e.employee_id
+from employees e left join cte c
+on e.employee_id=c.employee_id
+where ifnull(hours,0) < needed_hours

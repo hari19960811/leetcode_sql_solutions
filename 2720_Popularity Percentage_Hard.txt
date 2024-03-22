@@ -1,0 +1,12 @@
+with cte as
+(
+select user1 as user_1,user2 as user_2 from friends
+union all
+select user2 as user_1,user1 as user_2 from friends
+)
+select 
+user_1 as user1
+round((ifnull(count(distinct user_2),0.00)/ (select count(distinct user_1)) * 100.00,2) as percentage_popularity
+from friends)
+from cte
+group by user_1

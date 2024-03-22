@@ -1,0 +1,6 @@
+select bike_number
+       ,MAX(end_time) AS end_time
+from 
+bikes
+group by bike_number
+order by end_time desc;

@@ -1,0 +1,18 @@
+with cte as
+(
+select 
+voter,round((1/count(*)*100.00),2) as multiplier
+from votes
+group by voter
+),
+winner as
+(
+select 
+candidate,
+sum(multiplier)as vote_count
+from votes v join cte c
+v.voter=c.voter
+group by candidate;
+)
+select candidate
+from winner where vote_count=(select max(vote_count) from winner)

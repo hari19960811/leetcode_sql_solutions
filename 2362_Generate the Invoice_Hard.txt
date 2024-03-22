@@ -1,0 +1,16 @@
+with cte as
+(
+select pu.invoice_id,
+sum(product * quantity) as total
+from products p join purchases pu
+on p.product_id=pu.product_id
+group by pu.invoice_id
+order by sum(product * quantity) desc,pu.invoice_id 
+limit 1
+)
+select 
+pu.product_id,pu.quantity,
+(pu.quantity * p.price) as price
+from purchases pu join products p
+on pu.product_id=p.product_id
+where invoice_id in (select invoice_id from cte)
