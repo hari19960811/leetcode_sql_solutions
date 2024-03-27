@@ -1,0 +1,6 @@
+select 
+distinct user_id
+from loans
+where loan_type in ('Mortage','Refinance')
+group by user_id
+having count(distinct loan_type)=2;

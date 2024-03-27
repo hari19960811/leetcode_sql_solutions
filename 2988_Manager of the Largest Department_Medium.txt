@@ -1,0 +1,10 @@
+with cte as
+(
+select dep_id,count(*) as head_cnt
+from employees
+group by dep_id
+)
+select e.name as manager_name,s.dep_id
+from cte c join employees e 
+on c.dep_id=e.dep_id and e.position='Manager'
+where head_cnt = (select max(head_cnt) from cte)

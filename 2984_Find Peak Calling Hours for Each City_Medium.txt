@@ -1,0 +1,19 @@
+with cte as
+(
+select city,
+hours(call_time) as peak_calling_hour,
+count(caller_id) as number_of_calls
+from calls
+group by city,hours(call_time)
+),
+rank_order as
+(
+select *,
+rank() over(partition by city,peak_calling_hour order by number_of_calls) as rk 
+from cte
+)
+select city,
+peak_calling_hour,
+number_of_calls
+from rank_order
+where rk=1;

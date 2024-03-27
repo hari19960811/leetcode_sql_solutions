@@ -1,0 +1,11 @@
+with cte as 
+(
+select 
+o.seller_id,count(distinct item_brand) as cnt
+from orders o join users u 
+on o.seller_id=u.seller_id
+join items i on o.item_id=i.item_id
+where u.favourite_brand != i.item_brand
+group by o.seller_id )
+select o.seller_id,cnt as num_items
+from cte where cnt=(select max(cnt) from cte);

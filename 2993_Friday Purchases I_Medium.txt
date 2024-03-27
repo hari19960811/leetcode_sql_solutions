@@ -1,0 +1,9 @@
+select 
+ceil(dayofmonth(purchase_date) /7) as week_of_month,
+purchase_date,
+sum(amount_spend) as total_amount
+from purchases
+where date_format(purchase_date,'%Y-%m')='2023-11'
+and dayofweek(purchase_date)=6
+group by 2
+order by 1;

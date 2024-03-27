@@ -1,0 +1,18 @@
+with cte as
+(
+select *,
+rank() over(partition by user_id order by session_start) as rk
+from sessions
+),
+viewer_id as
+(
+select user_id
+from cte 
+where rk=1 and session_type='Viewer' 
+)
+select s.user_id,
+count(session_id) as sessions_count 
+from sessions s join viewer_id v
+on s.user_id=v.user_id
+where session_type='Streamer'
+group by s.user_id

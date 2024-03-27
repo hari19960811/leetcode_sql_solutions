@@ -1,0 +1,26 @@
+with cte as 
+(
+select 
+item_type,sum(square_footage) as area
+from inventory
+group by item_type
+),
+prime as 
+(
+select item_type,
+floor(500000/area) as item_count
+from cte
+where item_type='Prime_eligible'
+),
+non_prime as 
+(
+select item_type,
+floor((select 500000 - (area*item_count) from cte join prime using(item_type))
+/
+area) as item_count
+from cte
+where item_type='not_prime'
+)
+select * from prime
+union all
+select * from non_prime;

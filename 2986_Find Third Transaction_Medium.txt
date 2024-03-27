@@ -1,0 +1,18 @@
+with cte as
+(
+select *,
+rank() over(partition by user_id order by transaction_date) as rk
+from transactions
+),
+sum_two as
+(
+select user_id,sum(spend)
+from cte where rk=1 or rk=2
+group by user_id;
+)
+select c.user_id,
+c.spend as third_transaction_spend,
+c.transaction_date as third_transaction_date
+from cte c join sum_two s
+on c.user_id=s.user_id
+where c.rk=3 and c.spend > s.spend;

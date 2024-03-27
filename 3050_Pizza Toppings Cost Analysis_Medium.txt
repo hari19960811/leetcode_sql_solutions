@@ -1,0 +1,12 @@
+with cte as
+(
+select *,
+rank() over(order by topping_name) as rk 
+from toppings
+)
+select 
+concat(t1.topping_name,',',t2.topping_name,',',t3.topping_name) as pizza,t1.cost+t2.cost+t3.cost
+from cte c1 
+join cte c2 on c1.rk < c2.rk
+join cte c3 on c2.rk < c3.rk
+order by 2 desc ,1;

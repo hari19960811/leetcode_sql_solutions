@@ -1,0 +1,24 @@
+with cte as 
+(
+select 
+country,winery,sum(points) as total
+from Sessions 
+group by country,winery
+),
+rank_order as
+(
+select country,winery
+rank() over(partition by country order by total desc,country) as rk
+from cte
+)
+select 
+country,
+r1.winery as top_winery,
+ifnull(r2.winery,'No second winery') as second_winery,
+ifnull(r3.winery,'No third winery') as third_winery
+from 
+rank_order r1 
+left join rank_order r2 on r1.rk =r2.rk - 1
+left join rank_order r3 on r2.rk =r3.rk - 1
+where rk=1
+order by 1;
