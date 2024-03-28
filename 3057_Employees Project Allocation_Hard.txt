@@ -1,0 +1,16 @@
+with cte as 
+(
+select team,
+avg(workload) as avg_workload
+from project p join employees e
+on p.employee_id=e.employee_id
+group by team
+)
+select p.employee_id,
+p.project_id,e.name as employee_name,
+p.workload as project_workload
+from project p1 join employees e1
+on p1.employee_id=e1.employee_id
+join cte c on e1.team=c.team
+where p.workload > c.avg_workload
+order by1,2; 

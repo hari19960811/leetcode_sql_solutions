@@ -1,0 +1,6 @@
+select age_bucket,
+round(sum(case when activity_type = 'send' then time_spent else 0 end) * 100.0 /sum(time_spent),2) as send_perc,
+round(sum(case when activity_type = 'open' then time_spent else 0 end) * 100.0 /sum(time_spent),2) as open_perc 
+from activities a
+join age ag on a.user_id=ag.user_id
+group by age_bucket;

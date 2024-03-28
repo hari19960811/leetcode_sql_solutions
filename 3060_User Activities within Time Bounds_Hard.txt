@@ -1,0 +1,9 @@
+with cte as
+(
+select user_id,
+session_start,
+lag(session_end) over(partition by user_id,session_type order by session_end) as prev_session
+)
+select distinct user_id
+from cte
+where timestampdiff(hour,prev_session_end,session_start) <= 12;
